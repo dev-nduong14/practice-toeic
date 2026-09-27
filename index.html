@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TOEIC Reading Practice - Double Passage</title>
+  <style>
+    :root {
+      --navy: #0c2f57;
+      --navy-2: #153f6f;
+      --blue: #2d79c7;
+      --blue-soft: #edf6ff;
+      --paper: #fffdf8;
+      --bg: #f4f6f8;
+      --ink: #17263b;
+      --muted: #69778c;
+      --line: #dfe5ec;
+      --orange: #d56f2d;
+      --orange-soft: #fff3e8;
+      --green: #168b54;
+      --green-soft: #eaf8f0;
+      --red: #c33d3d;
+      --red-soft: #fff0f0;
+      --yellow: #fff0a8;
+      --shadow: 0 16px 40px rgba(14, 43, 73, 0.10);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #f5f7fa 0%, #eef2f6 100%);
+      color: var(--ink);
+      line-height: 1.55;
+    }
+
+    button, input { font: inherit; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(12, 47, 87, .96);
+      backdrop-filter: blur(10px);
+      color: white;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .topbar-inner {
+      max-width: 1260px;
+      margin: 0 auto;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: .2px;
+      white-space: nowrap;
+    }
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.22);
+      background: rgba(255,255,255,.08);
+    }
+    .nav {
+      display: flex;
+      gap: 8px;
+      margin-left: auto;
+    }
+    .nav span {
+      padding: 9px 12px;
+      border-radius: 9px;
+      color: #dbe8f7;
+      font-size: 14px;
+    }
+    .nav .active {
+      background: rgba(255,255,255,.10);
+      color: white;
+      box-shadow: inset 0 -2px 0 #f0a15d;
+    }
+
+    .page {
+      max-width: 1260px;
+      margin: 0 auto;
+      padding: 28px 24px 48px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #fff9f2, #ffffff 65%);
+      border: 1px solid #f0e1d2;
+      border-radius: 24px;
+      padding: 24px 26px;
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: center;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+    .eyebrow {
+      color: #b9551b;
+      font-weight: 800;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      margin-bottom: 5px;
+    }
+    h1 {
+      margin: 0;
+      color: var(--navy);
+      font-size: clamp(28px, 3.3vw, 44px);
+      line-height: 1.05;
+    }
+    .hero p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 16px;
+    }
+    .hero-badge {
+      min-width: 230px;
+      background: white;
+      border: 1px solid #f1d8c0;
+      border-radius: 16px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-badge .icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--orange-soft);
+      display: grid;
+      place-items: center;
+      color: var(--orange);
+      font-size: 22px;
+      font-weight: 900;
+    }
+    .hero-badge strong { color: var(--navy); display: block; }
+    .hero-badge small { color: var(--muted); }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(390px, .92fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .stack { display: grid; gap: 22px; }
+
+    .card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 28px rgba(14, 43, 73, .07);
+      overflow: hidden;
+    }
+    .card-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px;
+      background: linear-gradient(180deg, #f5fbff, #eef7ff);
+      border-bottom: 1px solid #dcecf8;
+      color: var(--navy);
+      font-weight: 800;
+    }
+    .card-head .mini-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #2a75c3, #4e9be5);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-size: 17px;
+    }
+    .card-body { padding: 20px; }
+
+    .announcement-title {
+      text-align: center;
+      font-size: 24px;
+      margin: 0 0 10px;
+      color: #0b2d53;
+      font-family: Georgia, "Times New Roman", serif;
+    }
+    .announcement p { margin: 0 0 11px; color: #37465a; }
+    .event {
+      padding: 11px 12px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      transition: .25s ease;
+      margin: 4px 0;
+    }
+    .event-title {
+      font-weight: 800;
+      color: #132b4a;
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+    }
+    .event-title::before {
+      content: "›";
+      font-size: 23px;
+      line-height: 20px;
+      color: #2574c2;
+      font-weight: 900;
+    }
+    .event p { margin: 3px 0 0 18px; }
+
+    .email-meta {
+      display: grid;
+      grid-template-columns: 76px 1fr;
+      row-gap: 8px;
+      color: #34445a;
+      padding-bottom: 15px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--line);
+    }
+    .email-meta strong { color: var(--blue); }
+    .email-body p { color: #37465a; margin: 0 0 13px; }
+
+    .target-highlight {
+      background: transparent;
+      border-radius: 5px;
+      padding: 0 2px;
+      transition: background .35s ease, box-shadow .35s ease;
+    }
+    body.revealed .target-highlight {
+      background: var(--yellow);
+      box-shadow: 0 0 0 2px rgba(255, 211, 61, .15);
+    }
+    body.revealed .target-event {
+      background: linear-gradient(90deg, #fff9df, #fff5c8);
+      border-color: #efd77a;
+    }
+
+    .question-card .card-body { padding: 18px 18px 20px; }
+    .question-title {
+      font-size: 19px;
+      font-weight: 800;
+      color: #183453;
+      margin-bottom: 14px;
+    }
+    .choices { display: grid; gap: 10px; }
+    .choice {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-align: left;
+      padding: 12px 14px;
+      border: 1px solid #dfe4ea;
+      border-radius: 12px;
+      background: #fff;
+      color: #4d5969;
+      cursor: pointer;
+      transition: transform .16s ease, border-color .16s ease, background .16s ease, box-shadow .16s ease;
+    }
+    .choice:hover {
+      transform: translateY(-1px);
+      border-color: #aac8e6;
+      box-shadow: 0 7px 18px rgba(37, 93, 148, .08);
+    }
+    .radio {
+      width: 22px;
+      height: 22px;
+      border: 2px solid #c7d0d9;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+    }
+    .choice-letter { color: #8994a2; font-weight: 700; }
+    .choice.correct {
+      border-color: #32a66d;
+      background: var(--green-soft);
+      color: #0f6c43;
+      font-weight: 800;
+    }
+    .choice.correct .radio { border-color: var(--green); background: var(--green); }
+    .choice.correct .radio::after { content: "✓"; color: white; font-size: 14px; font-weight: 900; }
+    .choice.wrong {
+      border-color: #e58a8a;
+      background: var(--red-soft);
+      color: var(--red);
+      font-weight: 800;
+    }
+    .choice.wrong .radio { border-color: var(--red); background: var(--red); }
+    .choice.wrong .radio::after { content: "×"; color: white; font-size: 16px; font-weight: 900; }
+    .choice.dimmed { opacity: .52; }
+
+    .feedback {
+      margin-top: 14px;
+      border-radius: 12px;
+      padding: 12px 13px;
+      font-weight: 700;
+      display: none;
+    }
+    .feedback.good { display:block; background: var(--green-soft); color: #0f7045; border: 1px solid #a7dfbf; }
+    .feedback.bad { display:block; background: var(--red-soft); color: #a63434; border: 1px solid #efbbbb; }
+
+    .actions {
+      margin-top: 14px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 13px;
+      cursor: pointer;
+      font-weight: 800;
+      transition: .2s ease;
+    }
+    .btn-secondary {
+      background: #eef3f7;
+      color: #39516a;
+    }
+    .btn-secondary:hover { background: #e3ebf2; }
+
+    .explanation {
+      margin-top: 24px;
+      background: white;
+      border: 1px solid #bfe0ce;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(18px);
+      max-height: 0;
+      pointer-events: none;
+      transition: opacity .35s ease, transform .35s ease, max-height .5s ease;
+    }
+    .explanation.show {
+      opacity: 1;
+      transform: translateY(0);
+      max-height: 1400px;
+      pointer-events: auto;
+    }
+    .explanation-head {
+      padding: 18px 20px;
+      background: linear-gradient(90deg, #effaf4, #fffaf4);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid #d9ecdf;
+    }
+    .explanation-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .bulb {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #14905a;
+      color: white;
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+    }
+    .explanation-title h2 { margin: 0; color: #13365a; font-size: 22px; }
+    .explanation-title p { margin: 1px 0 0; color: var(--muted); font-size: 14px; }
+    .strategy-badge {
+      border: 1px solid #efcfaa;
+      background: #fff8ee;
+      border-radius: 13px;
+      padding: 9px 12px;
+      color: #9d491e;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    .strategy-badge strong { color: #183453; }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      padding: 20px;
+    }
+    .step {
+      padding: 0 16px;
+      position: relative;
+      min-width: 0;
+    }
+    .step + .step { border-left: 1px solid #e3e8ee; }
+    .step-no {
+      display: inline-grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      margin-right: 7px;
+      font-weight: 900;
+      color: #173554;
+    }
+    .step:nth-child(1) .step-no { background: #ffe1cd; color:#af4b12; }
+    .step:nth-child(2) .step-no { background: #d8ebff; color:#1f67af; }
+    .step:nth-child(3) .step-no { background: #d7f2df; color:#167144; }
+    .step:nth-child(4) .step-no { background: #ffe0de; color:#b03c35; }
+    .step-head {
+      display: flex;
+      align-items: center;
+      margin-bottom: 11px;
+      font-weight: 900;
+      color: #13365a;
+    }
+    .step-box {
+      min-height: 172px;
+      padding: 13px;
+      border-radius: 12px;
+      color: #314158;
+      font-size: 14px;
+    }
+    .step:nth-child(1) .step-box { background:#fff8e8; }
+    .step:nth-child(2) .step-box { background:#eef7ff; }
+    .step:nth-child(3) .step-box { background:#eefaf2; }
+    .step:nth-child(4) .step-box { background:#fff1f0; }
+    .step-box strong { color: #17324f; }
+    .keyword-chip {
+      display: inline-block;
+      background: #ffe89b;
+      border-radius: 6px;
+      padding: 3px 6px;
+      margin: 3px 2px 3px 0;
+      font-weight: 800;
+      color: #2d3540;
+    }
+    .step-note {
+      margin-top: 10px;
+      color: #69778c;
+      font-size: 13px;
+      font-style: italic;
+    }
+
+    .tip {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: #f6f8fb;
+      border: 1px solid #e1e7ee;
+      color: #4c5a6d;
+      font-size: 14px;
+    }
+    .tip strong { color: var(--navy); }
+
+    @media (max-width: 960px) {
+      .nav { display:none; }
+      .hero { align-items:flex-start; }
+      .hero-badge { display:none; }
+      .content-grid { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: 1fr 1fr; gap: 18px; }
+      .step + .step { border-left: 0; }
+      .step:nth-child(even) { border-left: 1px solid #e3e8ee; }
+    }
+    @media (max-width: 620px) {
+      .topbar-inner, .page { padding-left: 14px; padding-right: 14px; }
+      .page { padding-top: 16px; }
+      .hero { padding: 20px 18px; border-radius: 18px; }
+      .card-body { padding: 16px; }
+      .steps { grid-template-columns: 1fr; padding: 16px; }
+      .step { padding: 0 0 15px; }
+      .step:nth-child(even) { border-left: 0; }
+      .step + .step { border-top: 1px solid #e3e8ee; padding-top: 15px; }
+      .explanation-head { align-items:flex-start; flex-direction:column; }
+      .strategy-badge { white-space: normal; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-icon">📖</div>
+        <span>TOEIC Reading Practice</span>
+      </div>
+      <nav class="nav" aria-label="Main navigation">
+        <span class="active">Practice</span>
+        <span>Strategy</span>
+        <span>Review</span>
+        <span>Vocabulary</span>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Double Passages</div>
+        <h1>Practice Question – Double Passage</h1>
+        <p>Chọn đáp án đúng và xem lời giải theo từng bước đối chiếu thông tin.</p>
+      </div>
+      <div class="hero-badge" aria-hidden="true">
+        <div class="icon">◎</div>
+        <div>
+          <strong>TOEIC Reading</strong>
+          <small>Read • Analyze • Choose</small>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-grid">
+      <article class="card announcement">
+        <div class="card-head">
+          <div class="mini-icon">▤</div>
+          <span>Passage 1 – Announcement</span>
+        </div>
+        <div class="card-body">
+          <h2 class="announcement-title">Summer Lecture Series</h2>
+          <p>Sponsored by the Department of City Planning at Wurnster University</p>
+          <p>The Department of City Planning is excited to announce a summer lecture series that will be focusing on budgeting issues that concern local residents and municipalities. Financial management is one of the most important duties of local government's operations. We hope to improve the status of budgeting at the local government level across the nation through community involvement and participation. All lectures will be held in the Hayston Building on the Wurnster campus.</p>
+
+          <div class="event">
+            <div class="event-title">Monday, February 1, 6:00 P.M., Room 401</div>
+            <p>Speaker: Tim Powell, Professor of Policy Analysis at Wurnster University</p>
+            <p>Strategic Planning — Learn how to develop budgets in order to monitor progress toward community goals and successful outcomes.</p>
+          </div>
+
+          <div class="event target-event">
+            <div class="event-title"><span class="target-highlight">Wednesday, February 3, 7:00 P.M., Room 305</span></div>
+            <p>Speaker: <span class="target-highlight">Melissa Simmons</span>, Kennedy Institute for Policy Making</p>
+            <p>Focusing on Our Children — Studies show that building playgrounds and sports facilities for children helps make better communities.</p>
+          </div>
+
+          <div class="event">
+            <div class="event-title">Monday, February 8, 6:00 P.M., Room 202</div>
+            <p>Speaker: Hank Ross, Michigan Municipal League</p>
+            <p>Managing Our County's Parks — Learn how to preserve our local parks as a valuable community resource.</p>
+          </div>
+
+          <div class="event">
+            <div class="event-title">Wednesday, February 10, 5:30 P.M., Room 404</div>
+            <p>Speaker: Scott Watson, Executive Director, Local Government Academy</p>
+            <p>Economic Opportunities and Local Ecology — Economic opportunity is often accompanied by potential risks to the surrounding ecosystem, and balancing the two can be difficult.</p>
+          </div>
+
+          <p style="margin-top:14px;">Please contact Patricia Flores at pfloresiawurnster.edu for additional information.</p>
+        </div>
+      </article>
+
+      <div class="stack">
+        <article class="card">
+          <div class="card-head">
+            <div class="mini-icon">✉</div>
+            <span>Passage 2 – Email</span>
+          </div>
+          <div class="card-body">
+            <div class="email-meta">
+              <strong>To:</strong><span>Patricia Flores</span>
+              <strong>From:</strong><span>Jake Patterson jpatterson@wurnster.edu</span>
+              <strong>Subject:</strong><span>Lecture Series</span>
+              <strong>Date:</strong><span>January 24</span>
+            </div>
+            <div class="email-body">
+              <p>Dear Ms. Flores,</p>
+              <p>I work for Facilities Management here at Wurnster University. It was recently brought to my attention that there is a scheduling conflict concerning one of your lecture dates. <span class="target-highlight">Room 305</span> has been reserved for <span class="target-highlight">every Wednesday</span> this semester by the Wurnster Debate Club. Therefore, I'm sorry to inform you that you will need to move the location or the time of this talk. You can visit the facilities management website in order to check the availability of other room locations and reschedule the talk.</p>
+              <p>Jake Patterson</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="card question-card" id="questionCard">
+          <div class="card-head">
+            <div class="mini-icon" style="background:linear-gradient(135deg,#f08a3f,#d8621d);">?</div>
+            <span>Question</span>
+          </div>
+          <div class="card-body">
+            <div class="question-title">According to Mr. Patterson, whose lecture must be rescheduled?</div>
+            <div class="choices" role="radiogroup" aria-label="Answer choices">
+              <button class="choice" data-answer="A" role="radio" aria-checked="false">
+                <span class="radio"></span><span><span class="choice-letter">(A)</span> Mr. Watson's</span>
+              </button>
+              <button class="choice" data-answer="B" role="radio" aria-checked="false">
+                <span class="radio"></span><span><span class="choice-letter">(B)</span> Mr. Ross's</span>
+              </button>
+              <button class="choice" data-answer="C" role="radio" aria-checked="false">
+                <span class="radio"></span><span><span class="choice-letter">(C)</span> Ms. Simmons's</span>
+              </button>
+              <button class="choice" data-answer="D" role="radio" aria-checked="false">
+                <span class="radio"></span><span><span class="choice-letter">(D)</span> Mr. Powell's</span>
+              </button>
+            </div>
+
+            <div class="feedback" id="feedback" aria-live="polite"></div>
+            <div class="actions">
+              <button class="btn btn-secondary" id="resetBtn" type="button">↻ Làm lại</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="explanation" id="explanation" aria-hidden="true">
+      <div class="explanation-head">
+        <div class="explanation-title">
+          <div class="bulb">💡</div>
+          <div>
+            <h2>Explanation</h2>
+            <p>Giải thích theo đúng quy trình: Keyword → Where to look → Evidence → Answer</p>
+          </div>
+        </div>
+        <div class="strategy-badge">🎯 <strong>Question type:</strong> Cross-reference<br/>Cần đối chiếu 2 passages</div>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-head"><span class="step-no">1</span>🔑 Keyword</div>
+          <div class="step-box">
+            <span class="keyword-chip">“rescheduled”</span>
+            <span class="keyword-chip">“Room 305”</span>
+            <span class="keyword-chip">“Wednesday”</span>
+            <div class="step-note">Từ khóa cho biết ta cần tìm một buổi diễn thuyết liên quan đồng thời đến phòng 305 và ngày Wednesday.</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-head"><span class="step-no">2</span>🔎 Where to look</div>
+          <div class="step-box">
+            Passage 2 cho biết <strong>Room 305</strong> đã được đặt vào <strong>every Wednesday</strong> trong học kỳ. Vì vậy ta quay lại Passage 1 để tìm buổi nào diễn ra <strong>vào Wednesday và tại Room 305</strong>.
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-head"><span class="step-no">3</span>📄 Evidence</div>
+          <div class="step-box">
+            Passage 1 có dòng:<br/><br/>
+            <strong>“Wednesday, February 3, 7:00 P.M., Room 305”</strong><br/><br/>
+            Speaker: <strong>Melissa Simmons</strong>.
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-head"><span class="step-no">4</span>✓ Answer</div>
+          <div class="step-box">
+            Vì buổi của Melissa Simmons vừa diễn ra vào <strong>Wednesday</strong> vừa dùng <strong>Room 305</strong>, nên buổi này phải được đổi lịch/đổi địa điểm.<br/><br/>
+            <strong>Đáp án: (C) Ms. Simmons's.</strong>
+            <div class="step-note">Đây là câu hỏi không thể làm chỉ bằng một passage; bắt buộc phải đối chiếu thông tin ở cả hai.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="tip">
+      <strong>Mẹo làm Double Passage:</strong> đừng đọc lại cả hai đoạn từ đầu. Hãy lấy từ khóa ở câu hỏi → xác định passage chứa điều kiện → quay sang passage còn lại để tìm thông tin khớp chính xác.
+    </div>
+  </main>
+
+  <script>
+    const choices = [...document.querySelectorAll('.choice')];
+    const feedback = document.getElementById('feedback');
+    const explanation = document.getElementById('explanation');
+    const resetBtn = document.getElementById('resetBtn');
+    const correctAnswer = 'C';
+    let locked = false;
+
+    function revealExplanation() {
+      document.body.classList.add('revealed');
+      explanation.classList.add('show');
+      explanation.setAttribute('aria-hidden', 'false');
+      setTimeout(() => {
+        explanation.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 220);
+    }
+
+    function selectAnswer(button) {
+      if (locked) return;
+      locked = true;
+      const picked = button.dataset.answer;
+
+      choices.forEach(choice => {
+        const ans = choice.dataset.answer;
+        choice.setAttribute('aria-checked', ans === picked ? 'true' : 'false');
+
+        if (ans === correctAnswer) {
+          choice.classList.add('correct');
+        } else if (ans === picked) {
+          choice.classList.add('wrong');
+        } else {
+          choice.classList.add('dimmed');
+        }
+      });
+
+      if (picked === correctAnswer) {
+        feedback.className = 'feedback good';
+        feedback.innerHTML = '✓ Chính xác! Đáp án (C). Bây giờ hãy nhìn cách đối chiếu 2 passages bên dưới.';
+      } else {
+        feedback.className = 'feedback bad';
+        feedback.innerHTML = '✕ Chưa đúng. Đáp án đúng là (C) Ms. Simmons\'s. Xem 4 bước giải thích bên dưới để thấy vì sao.';
+      }
+
+      revealExplanation();
+    }
+
+    choices.forEach(choice => choice.addEventListener('click', () => selectAnswer(choice)));
+
+    resetBtn.addEventListener('click', () => {
+      locked = false;
+      choices.forEach(choice => {
+        choice.classList.remove('correct', 'wrong', 'dimmed');
+        choice.setAttribute('aria-checked', 'false');
+      });
+      feedback.className = 'feedback';
+      feedback.textContent = '';
+      document.body.classList.remove('revealed');
+      explanation.classList.remove('show');
+      explanation.setAttribute('aria-hidden', 'true');
+      document.getElementById('questionCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  </script>
+</body>
+</html>
